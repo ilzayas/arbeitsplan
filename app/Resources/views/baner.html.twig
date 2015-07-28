@@ -1,0 +1,26 @@
+<div class="page-header alert alert-info banner-ily">    
+    <div>  
+        {% set locale= app.request.locale %}
+        {% if locale == 'de' %}
+            <span>DE</span>
+            <a href='{{ path('login', { '_locale': 'en' }) }}'>EN</a>
+        {% elseif locale == 'en' %}
+            <a href='{{ path('login', { '_locale': 'de' }) }}'>DE</a>
+            <span>EN</span>
+        {% endif %}
+        <div class="pull-right">{{ 'now' | date("F j, Y H:i", "Europe/Paris") }}&nbsp;
+            <a class="glyphicon glyphicon-question-sign" href="{{ asset('HP3.png') }}"></a></div>
+        <h1>{{ 'H & P Arbeitsplan'|trans }}
+            <small><ul class="list-inline top pull-right">
+                    {% block login %}
+                        {% if is_granted('ROLE_USER') %} 
+                            <li><i class="glyphicon glyphicon-user"></i></li>
+                            <li><p>{{ app.user }}</p></li>
+                            <li><a href="{{ path('logout') }}">{{ 'Logout'|trans }}</a></li>
+                        {% endif %}   
+                    {% endblock %}
+                </ul>
+            </small>
+        </h1>
+    </div>
+</div>

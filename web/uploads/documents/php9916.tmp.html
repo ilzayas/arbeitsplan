@@ -1,0 +1,25 @@
+{% if tasks|length > 0 %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Image</th>
+                            <th>Beginningdate</th>
+                            <th>Endingdate</th>
+                            <th>Notas</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                            <tr>
+                                <td><a href="{{ path('task_edit', { 'id': task.id }) }}">{{ task.name }}</a></td>
+                                <td>{{ task.image }}</td>
+                                <td>{% if task.beginningDate %}{{ task.beginningDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                <td>{% if task.endingDate %}{{ task.endingDate|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                <td>{{ task.notas }}</td>
+                                <td><a href="{{ path('task_delete', { 'id': task.id }) }}" onclick="return confirm('Sind Sie sicher?')">{{ 'Löschen'|trans }}</a></td>                               
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                    <em>{{ "Kein task"|trans }}</em>
+                {% endif %}

@@ -1,0 +1,524 @@
+{% extends '::base.html.twig' %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/collapse.js') }}"></script>
+    <script>
+        //----------para desplegar las listas de tareas
+        $(function () {
+            $('.collapse').collapse({
+                toggle: true
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top'
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body -%}
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <div class="panel-title"><strong>{{ "Alle Aufgaben"|trans }}</strong>
+                {#<label class="pull-right"><a href="{{ path('export') }}" data-toggle="tooltip" data-original-title="{{ 'Exportieren'|trans }}">                                        
+                    <span class="glyphicon glyphicon-export"></span></a></label>#}
+            </div>
+            <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+        </div>
+        {#<div class="panel-body">#}
+        
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                {#------------------------------tareas pasadas#}
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapsePasadas" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Überfallig'|trans }}</strong><span class="badge badge-important pull-right">{{ tareasPasadas|length }}</span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapsePasadas" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            {% if tareasPasadas|length > 0 %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for task in tareasPasadas %}
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                                        {% else %}<input type="radio">&nbsp;{% endif %}
+                                                    </a>                                  
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">                                                        
+                                                        <strong>{{ task.id }}</strong>&nbsp;
+                                                        <strong>{{ task.name }}</strong></a>
+                                                    <small class="pull-right">
+                                                        <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
+                                                        {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}</small>                                
+                                                </h4>
+                                            </div>
+                                            <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <style>blockquote{
+                                                        {#border-left: 5px solid #{{ task.client.color }};#}
+                                                        font-size: 90%;
+                                                        }
+                                                    </style>
+                                                    <blockquote id='{{ task.id }}'>                                                        
+                                                        <ul class="list-inline">
+                                                            {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                <li><p>{{ task.teil|trans }}</p></li>{% endif %}
+                                                                <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                                <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                        </ul>
+                                                            {% if task.file|length > 0 %}
+                                                                <ul class="list-inline">
+                                                                    <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                                        {% for file in task.file %}
+                                                                            <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                                        {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                            {% if task.notas %}<ul class="list-inline">
+                                                                    <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                    <li><p>{{ task.notas|trans }}</p></li>
+                                                                </ul>{% endif %}
+                                                                <hr>                                                                
+                                                            {% if task.history|length > 0 %}
+                                                                {% for h in task.history %}
+                                                                     <ul class="list-inline">
+                                                                        <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                                        <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                                        <li><p>{{ h.action }}</p></li></ul>
+                                                                {% endfor %}
+                                                            {% endif %}                                                                
+                                                    </blockquote>
+                                                </div>
+                                            </div>
+                                         </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <em>{{ "Kein task"|trans }}</em>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>{#-----------------fin tareas pasadas#}                
+                <div class="panel panel-warning">{#------------------------------tareas heute#}
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseHeute" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Heute'|trans }}</strong><span class="badge badge-important pull-right">{{ tasksHeute|length }}</span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseHeute" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            {% if tasksHeute|length > 0 %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for task in tasksHeute %}
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                                        {% else %}<input type="radio">&nbsp;{% endif %}
+                                                    </a>
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        <strong>{{ task.id }}</strong>&nbsp;
+                                                        <strong>{{ task.name }}</strong></a>
+                                                    <small class="pull-right">
+                                                        {% if task.tags|length > 0 %}<ul class="list-inline">
+                                                                {% for t in task.tags %}
+                                                                    <li><span class="label label-primary">{{ t.tag.name }}</span></li>
+                                                                    {% endfor %}
+                                                            </ul>{% endif %}
+                                                            <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
+                                                            {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}</small>                                
+                                                </h4>
+                                            </div>
+                                            <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <style>blockquote{
+                                                        {#border-left: 5px solid #{{ task.client.color }};#}
+                                                        font-size: 90%;
+                                                        }
+                                                    </style>
+                                                    <blockquote>                                                        
+                                                        <ul class="list-inline">
+                                                            {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                <li><p>{{ task.teil|trans }}</p></li>{% endif %}
+                                                                <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                                <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                        </ul>
+                                                            {% if task.file|length > 0 %}
+                                                                <ul class="list-inline">
+                                                                    <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                                        {% for file in task.file %}
+                                                                            <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                                        {% endfor %}
+                                                                </ul>
+                                                            {% endif %}
+                                                            {% if task.notas %}<ul class="list-inline">
+                                                                    <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                    <li><p>{{ task.notas|trans }}</p></li>
+                                                                </ul>{% endif %}
+                                                                <hr>                                                                
+                                                            {% if task.history|length > 0 %}
+                                                                {% for h in task.history %}
+                                                                     <ul class="list-inline">
+                                                                        <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                                        <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                                        <li><p>{{ h.action }}</p></li></ul>
+                                                                {% endfor %}
+                                                            {% endif %}                                                                
+                                                    </blockquote>
+                                                </div>
+                                            </div>
+                                         </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <em>{{ "Kein task"|trans }}</em>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>{# aqui estoy cerrando tareas de hoy #}
+                {#-----------------------------------Morgen------------------------------------#}
+                <div class="panel panel-danger">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseMorgen" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Morgen'|trans }}</strong><span class="badge badge-important pull-right">{{ tasksMorgen|length }}</span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseMorgen" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            {% if tasksMorgen|length > 0 %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for task in tasksMorgen %}
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                                        {% else %}<input type="radio">&nbsp;{% endif %}
+                                                    </a>
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        <strong>{{ task.id }}</strong>&nbsp;
+                                                        <strong>{{ task.name }}</strong></a>
+                                                    <small class="pull-right">
+                                                    {% if task.tags|length > 0 %}<ul class="list-inline">
+                                                        {% for t in task.tags %}
+                                                            <li><span class="label label-primary">{{ t.tag.name }}</span></li>
+                                                        {% endfor %}
+                                                    </ul>{% endif %}
+                                                    <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
+                                                    {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}</small>                                
+                                                </h4>
+                                            </div>
+                                            <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <style>blockquote{
+                                                        {#border-left: 5px solid #{{ task.client.color }};#}
+                                                        font-size: 90%;
+                                                        }
+                                                    </style>
+                                                    <blockquote>                                                        
+                                                        <ul class="list-inline">
+                                                            {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                <li><p>{{ task.teil|trans }}</p></li>{% endif %}
+                                                                <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                                <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                        </ul>
+                                                        {% if task.file|length > 0 %}
+                                                            <ul class="list-inline">
+                                                                <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                                    {% for file in task.file %}
+                                                                        <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                                    {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                        {% if task.notas %}<ul class="list-inline">
+                                                            <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                            <li><p>{{ task.notas|trans }}</p></li>
+                                                            </ul>{% endif %}
+                                                        <hr>                                                                
+                                                        {% if task.history|length > 0 %}
+                                                            {% for h in task.history %}
+                                                                <ul class="list-inline">
+                                                                    <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                                    <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                                    <li><p>{{ h.action }}</p></li></ul>
+                                                            {% endfor %}
+                                                        {% endif %}                                                                
+                                                    </blockquote>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <em>{{ "Kein task"|trans }}</em>
+                                 {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>{# aqui estoy cerrando morgen, para arreglar problema con espacios entre paneles #}
+                {#-----------------------------------Nachste 30 Tage------------------------------------#}
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse30" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Nachste 30 Tage'|trans }}</strong><span class="badge pull-right">{{ tasks30Tagen|length }}</span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapse30" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            {% if tasks30Tagen|length > 0 %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for task in tasks30Tagen %}
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">                                                
+                                                <h4 class="panel-title">
+                                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                                        {% else %}<input type="radio">&nbsp;{% endif %}
+                                                    </a>
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        <strong>{{ task.id }}</strong>&nbsp;
+                                                        <strong>{{ task.name }}</strong></a>
+                                                        <small class="pull-right">
+                                                            {% if task.tags|length > 0 %}
+                                                                {% for tag in task.tags %}
+                                                                     <span class="label label-primary">{{ tag.name }}</span>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
+                                                        {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}</small>                                
+                                                </h4>                                                
+                                            </div>
+                                            <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <style>blockquote{
+                                                        {#border-left: 5px solid #{{ task.client.color }};#}
+                                                        font-size: 90%;
+                                                        }
+                                                    </style>
+                                                    <blockquote>                                                        
+                                                        <ul class="list-inline">
+                                                            {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                <li><p>{{ task.teil|trans }}</p></li>{% endif %}
+                                                                <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                                <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                        </ul>
+                                                        {% if task.file|length > 0 %}
+                                                            <ul class="list-inline">
+                                                                <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                                    {% for file in task.file %}
+                                                                        <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                                    {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                        {% if task.notas %}<ul class="list-inline">
+                                                            <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                            <li><p>{{ task.notas|trans }}</p></li>
+                                                        </ul>{% endif %}
+                                                        <hr>                                                                
+                                                        {% if task.history|length > 0 %}
+                                                            {% for h in task.history %}
+                                                                <ul class="list-inline">
+                                                                    <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                                    <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                                    <li><p>{{ h.action }}</p></li></ul>
+                                                            {% endfor %}
+                                                        {% endif %}                                                                
+                                                    </blockquote>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <em>{{ "Kein task"|trans }}</em>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div> 
+                </div>{# aqui estoy cerrando proximos 30 dias, para arreglar problema con espacios entre paneles #}
+                {# --------------------------- sin fecha de fin ----------------------------------------------------------------- #}
+                <div class="panel panel-default">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseSinFecha" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Kein fälligkeitsdatum'|trans }}</strong><span class="badge pull-right">{{ tasksKeinFalligDatum|length }}</span>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseSinFecha" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            {% if tasksKeinFalligDatum|length > 0 %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for task in tasksKeinFalligDatum %}
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                                        {% else %}<input type="radio">&nbsp;{% endif %}
+                                                    </a>
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        <strong>{{ task.id }}</strong>&nbsp;
+                                                        <strong>{{ task.name }}</strong>
+                                                    </a>
+                                                    <small class="pull-right">
+                                                        {% if task.tags|length > 0 %}
+                                                            {% for tag in task.tags %}
+                                                                <span class="label label-primary">{{ tag.name }}</span>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
+                                                        {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}
+                                                    </small>                                
+                                                </h4>
+                                            </div>
+                                            <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <style>blockquote{
+                                                        {#border-left: 5px solid #{{ task.client.color }};#}
+                                                        font-size: 90%;
+                                                        }
+                                                    </style>
+                                                    <blockquote>                                                        
+                                                        <ul class="list-inline">
+                                                            {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                <li><p>{{ task.teil|trans }}</p></li>{% endif %}
+                                                            <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                            <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                        </ul>
+                                                        {% if task.file|length > 0 %}
+                                                            <ul class="list-inline">
+                                                                <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                                {% for file in task.file %}
+                                                                    <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                        {% if task.notas %}<ul class="list-inline">
+                                                            <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                            <li><p>{{ task.notas|trans }}</p></li>
+                                                            </ul>
+                                                        {% endif %}
+                                                        <hr>                                                                
+                                                        {% if task.history|length > 0 %}
+                                                            {% for h in task.history %}
+                                                                <ul class="list-inline">
+                                                                    <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                                    <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                                    <li><p>{{ h.action }}</p></li></ul>
+                                                            {% endfor %}
+                                                        {% endif %}                                                                
+                                                    </blockquote>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <em>{{ "Kein task"|trans }}</em>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>                
+                </div>{# aqui estoy cerrando div de sin fecha de vencimiento, para arreglar problema con espacios entre paneles #}{# ---------------------------fin de sin fecha de fin ----------------------------------------------------------------- #}
+                {# --------------------------- tareas futuras ----------------------------------------------------------------- #}
+                <div class="panel panel-success">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFertig" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Zukunft'|trans }}</strong><span class="badge badge-success pull-right">{{ tareasFuturas|length }}</span></a>
+                        </h4>
+                    </div>
+                    <div id="collapseFertig" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            {% if tareasFuturas|length > 0 %}
+                                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                                    {% for task in tareasFuturas %}
+                                        <div class="panel">
+                                            <div class="panel-heading" role="tab" id="headingOne">
+                                                <h4 class="panel-title">
+                                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                                        {% else %}<input type="radio">&nbsp;{% endif %}
+                                                    </a>
+                                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                                        <strong>{{ task.id }}</strong>&nbsp;
+                                                        <strong>{{ task.name }}</strong></a>
+                                                    <small class="pull-right">
+                                                        {% if task.tags|length > 0 %}
+                                                            {% for tag in task.tags %}
+                                                                <span class="label label-primary">{{ tag.name }}</span>
+                                                            {% endfor %}
+                                                        {% endif %}
+                                                        <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
+                                                        {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}
+                                                    </small>                                
+                                                </h4>
+                                            </div>
+                                            <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                                <div class="panel-body">
+                                                    <style>blockquote{
+                                                        {#border-left: 5px solid #{{ task.client.color }};#}
+                                                        font-size: 90%;
+                                                        }
+                                                    </style>
+                                                    <blockquote>                                                        
+                                                        <ul class="list-inline">
+                                                            {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
+                                                                <li><p>{{ task.teil|trans }}</p></li>
+                                                            {% endif %}
+                                                            <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                            <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                        </ul>
+                                                        {% if task.file|length > 0 %}
+                                                            <ul class="list-inline">
+                                                                <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                                {% for file in task.file %}
+                                                                    <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                                {% endfor %}
+                                                            </ul>
+                                                        {% endif %}
+                                                        {% if task.notas %}<ul class="list-inline">
+                                                            <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                            <li><p>{{ task.notas|trans }}</p></li>
+                                                            </ul>
+                                                        {% endif %}
+                                                        <hr>                                                                
+                                                        {% if task.history|length > 0 %}
+                                                            {% for h in task.history %}
+                                                                <ul class="list-inline">
+                                                                    <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                                    <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                                    <li><p>{{ h.action }}</p></li></ul>
+                                                            {% endfor %}
+                                                        {% endif %}                                                                
+                                                    </blockquote>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    {% else %}
+                                        <em>{{ "Kein task"|trans }}</em>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>{# --------------------------- fin de tareas futuras ----------------------------------------------------------------- #} 
+    </div>{#---fin collapsable, panel-group#}
+    {#</div>#}
+</div>
+{% endblock %}

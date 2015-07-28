@@ -1,0 +1,8 @@
+parameters:
+#    tarea.example.class: Proyecto\TaskBundle\Example
+
+services:
+    paraLateral:
+        class: Proyecto\TaskBundle\Servicios\LateralService
+        arguments: [@doctrine]
+#        arguments: [@doctrine, "plain_value", %parameter%]

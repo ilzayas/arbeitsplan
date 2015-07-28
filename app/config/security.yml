@@ -1,0 +1,62 @@
+security:
+    encoders:
+        Proyecto\SecurityBundle\Entity\UserProject: { algorithm: sha1, iterations: 10, encode_as_base64: false }
+#        Symfony\Component\Security\Core\User\User: plaintext
+
+    role_hierarchy:
+        ROLE_ADMIN:       ROLE_USER
+        ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+
+    providers:
+        users:    
+            entity: { class: Proyecto\SecurityBundle\Entity\UserProject, property: username }
+
+    firewalls:
+        mine:
+            pattern:    ^/*
+            provider:    users
+            anonymous: ~
+            form_login:
+                check_path: /user/login_check
+                login_path: /user/login
+                default_target_path: /task/listTasks
+                always_use_default_target_path: true
+
+            logout:
+                path:   /user/logout
+                invalidate_session: false
+                target: /user/login
+            remember_me:
+                key:      aSecretKey
+                lifetime: 3600
+                path:     /
+                domain:   ~ # El valor predeterminado es el dominio actual de $_SERVER
+
+    access_control:
+        - { path: ^/user/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/list, roles: ROLE_USER }
+        - { path: ^/user/desactivar/\d*, roles: ROLE_ADMIN }
+        - { path: ^/user/activar/\d*, roles: ROLE_ADMIN }
+        - { path: ^/user/showUser, roles: ROLE_ADMIN }
+        - { path: ^/user/login_check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user/logout, roles: ROLE_USER }
+        - { path: ^/user/changeRol\d*, roles: ROLE_ADMIN }
+        - { path: ^/task/taskShow, roles: ROLE_USER }
+        - { path: ^/task/neuTask, roles: ROLE_USER }
+        - { path: ^/task/taskEdit/\d*, roles: ROLE_USER }
+        - { path: ^/task/taskDelete/\d*, roles: ROLE_USER }
+        - { path: ^/task/listTasks, roles: ROLE_USER }
+        - { path: ^/task/alle, roles: ROLE_ADMIN }
+        - { path: ^/task/heute, roles: ROLE_USER }
+        - { path: ^/task/erledig, roles: ROLE_USER }
+        - { path: ^/task/neuClient, roles: ROLE_USER }
+        - { path: ^/task/clientDelete/\d*, roles: ROLE_USER }
+        - { path: ^/task/clientEdit/\d*, roles: ROLE_USER }
+        - { path: ^/task/showClient/\d*, roles: ROLE_USER }
+        - { path: ^/task/listClient, roles: ROLE_USER }
+        - { path: ^/task/tasksClient/\d*, roles: ROLE_USER }
+        - { path: ^/task/buscar, roles: ROLE_USER }
+        - { path: ^/task/meineAufgaben, roles: ROLE_USER }
+        - { path: ^/task/export, roles: ROLE_USER }
+        #- { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY, requires_channel: https }  /de|en

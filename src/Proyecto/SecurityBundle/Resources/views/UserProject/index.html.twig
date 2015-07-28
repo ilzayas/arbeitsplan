@@ -1,0 +1,81 @@
+{% extends '::principal.html.twig' %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/collapse.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top'
+            });
+        });
+    </script>
+{% endblock %}
+{% block body -%}
+    {#<div class="col-xs-10">#}
+        <div class='panel panel-info'>
+            <div class="panel-heading">
+                <div class="panel-title"><strong>{{ "Benutzerliste"|trans }}&nbsp;</strong>
+                    <a class="pull-right" href="{{ path("register") }}"><span class="glyphicon glyphicon-plus-sign"></span> Neue Benutzer </a>
+                </div>
+                <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+            </div> 
+            <div class='panel-body'>
+                <table class="table table-condensed">
+                    <thead>
+                        <tr>
+                            <th>{{ "Id"|trans }}</th>
+                            <th>{{ "Benutzer"|trans }}</th>
+                            <th>{{ "Name"|trans }}</th>
+                            <th>{{ "Vorname"|trans }}</th>
+                            <th>{{ "Start"|trans }}</th>
+                            <th>{{ "Ende"|trans }}</th>
+                            <th>Rol</th>
+                            <th colspan='2'>{{ "Aktionen"|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entity in entities %}
+                            <tr>
+                                <td>{{ entity.id }}</td>
+                                <td>{{ entity.username }}</td>
+                                <td>{{ entity.name }}</td>
+                                <td>{{ entity.lastName }}</td>
+                                <td>{% if entity.beginningDate %}{{ entity.beginningDate|date('Y-m-d') }}{% endif %}</td>
+                                <td>{% if entity.endingDate %}{{ entity.endingDate|date('Y-m-d') }}{% endif %}</td>
+                                <td>{{ entity.rol }}</td>
+                                <td>
+                                    <ul class="list-inline">
+                                        {% if entity.isActive %}
+                                            <li>
+                                                <a class="btn btn-warning" href="{{ path('userDesact', { 'id': entity.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Deaktivieren'|trans }}" onclick="return confirm('Sind Sie sicher?')">
+                                                    <span class="glyphicon glyphicon-lock"></span>
+                                                </a>
+                                            </li>
+                                        {% else %}
+                                            <li>
+                                                <a class="btn btn-info" href="{{ path('userAct', { 'id': entity.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Aktivieren'|trans }}" onclick="return confirm('Sind Sie sicher?')">
+                                                    <strong>A</strong>
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                        <li>
+                                            <a class="btn btn-success" href="{{ path('changeRol', { 'id': entity.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Ändernde Rolle'|trans }}" onclick="return confirm('Sind Sie sicher?')">
+                                                <span class="glyphicon glyphicon-user"></span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="btn btn-primary" href="{{ path('userEditIly', { 'id': entity.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Abändern'|trans }}">
+                                                <span class="glyphicon glyphicon-edit"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+   {# </div>#}
+{% endblock %}

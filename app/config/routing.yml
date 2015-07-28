@@ -1,0 +1,11 @@
+proyecto_security:
+    resource: "@ProyectoSecurityBundle/Resources/config/routing.yml"
+    prefix:   /user
+
+
+tarea:
+    resource: "@TareaBundle/Resources/config/routing.yml"
+    prefix:   /task
+    
+
+

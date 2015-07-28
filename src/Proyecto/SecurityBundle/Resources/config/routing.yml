@@ -1,0 +1,45 @@
+login:
+    pattern: /login
+    defaults: { _controller: ProyectoSecurityBundle:Default:login }
+    
+userList:
+    pattern: /list
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:index }
+    
+userDesact:
+    pattern: /desactivar/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:desactivar }
+    
+userAct:
+    pattern: /activar/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:activar }
+    
+showUser:
+    pattern: /showUser/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:show }
+    
+userEdit:
+    pattern: /editUser/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:edit }
+    
+userEditIly:
+    pattern: /editUserIly/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:editIly }
+    
+userUpdate:
+    pattern: /editUser/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:update }
+    
+register:
+    pattern: /register
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:registrar }
+    
+login_check:
+    pattern: /login_check
+    
+logout:
+    pattern: /logout
+       
+changeRol:
+    pattern: /changeRol/{id}
+    defaults: { _controller: ProyectoSecurityBundle:UserProject:changeRol }

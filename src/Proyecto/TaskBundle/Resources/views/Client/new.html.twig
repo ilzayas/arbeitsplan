@@ -1,0 +1,43 @@
+{% extends '::principal.html.twig' %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/collapse.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top'
+            });
+        });
+    </script>
+    
+{% endblock %}
+{% block body %}
+    <div class='container'>
+        <div class='col-xs-12 col-sm-10 col-md-6 col-sm-offset-2 col-md-offset-2'>
+            <div class='panel panel-info'>
+                <div class="panel-heading">
+                    <div class="panel-title"><strong>{{ "Neue Kunde"|trans }}</strong></div>
+                    <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+                </div>
+                <div class='panel-body'>
+                    <form class='form-horizontal' action='{{ path("client_create") }}' method='post' {{ form_enctype(formClient) }}>
+                        <div class='form-group'>
+                            {{ form_widget(formClient.name,  { 'attr': {'class': 'form-control','placeholder':'Name'|trans } }) }}
+                        </div>
+                        <hr>
+                        {#<input class='btn btn-primary text-center' type='submit' value={{ 'Registrieren'|trans }}>
+                        <a class="btn btn-info" href="{{ path("tasklist") }}">{{ 'Abbrechen'|trans }}</a>#}
+                        
+                        
+                        <div class="col-md-offset-3">
+                            <input class='btn btn-primary text-center' type='submit' value={{ 'Speichern'|trans }}>&nbsp;&nbsp;
+                            <a class="btn btn-info" href="{{ path("tasklist") }}">{{ 'Abbrechen'|trans }}</a>
+                        </div> 
+                        {{ form_rest(formClient) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

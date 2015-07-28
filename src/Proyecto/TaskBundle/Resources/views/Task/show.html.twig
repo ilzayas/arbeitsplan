@@ -1,0 +1,150 @@
+{% extends '::principal.html.twig' %}
+{% block js %}
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/collapse.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top'
+            });
+        });
+    </script>
+
+{% endblock %}
+{% block body -%}
+    <div class='panel panel-info'>
+        <div class="panel-heading">
+            <div class="panel-title"><strong>Id:{{ entity.id }}&nbsp;<u>{{ entity.name }}</u>&nbsp;</strong>
+                <a class="pull-right" href="{{ path('taskIly', { 'id': entity.id }) }}">
+                    <span class="glyphicon glyphicon-edit"></span>&nbsp;{{ 'Abändern'|trans }}</a>
+            </div>
+            <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+        </div> 
+        <div class='panel-body'>
+            <div class="col-md-6">
+                <h4>{{ 'Allgemeine Informationen'|trans }}</h4>
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>{{ 'Anfangsdatum'|trans }}&nbsp;&nbsp;</th>
+                            <td>{{ entity.beginningDate|date('Y-m-d') }}</td>
+                        </tr>
+                        <tr>
+                            <th>{{ 'Enddatum'|trans }}&nbsp;&nbsp;</th>
+                            <td>{{ entity.endingDate|date('Y-m-d') }}</td>
+                        </tr>
+                        {% if entity.teil %}
+                            <tr>
+                                <th>{{ 'Teil'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.teil }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.notas %}
+                            <tr>
+                                <th>{{ 'Notizen'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.notas }}</td>
+                            </tr>
+                        {% endif %}
+                        <tr>
+                            <th>{{ 'Kunde'|trans }}&nbsp;&nbsp;</th>
+                            <td>{{ entity.client.name }}</td>
+                        </tr>
+                        {% if entity.erledig %}
+                            <tr>
+                                <th class="text-success"><span class="glyphicon glyphicon-ok success"></span>&nbsp;{{ 'Erledig'|trans }}</th>
+                            </tr>
+                        {% endif %}
+                        {% if entity.file|length > 0 %}
+                            <tr>
+                                <th>{{ 'Datein'|trans }}&nbsp;&nbsp;</th>
+                                <th>
+                        <ul class="list-inline">
+                            <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                {% for doc in entity.file %}
+                                <li><a  href="{{ asset('uploads/documents/'~ doc.path) }}">{{ doc.name }}
+                                    </a></li>&nbsp;
+                                {% endfor %}
+                        </ul>
+                        </th>                      
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-md-6">
+                <h4>{{ "Andere Informationen"|trans }}</h4>
+                <table class="table">
+                    <tbody>
+                        {% if entity.kontaktPerson %}
+                            <tr>
+                                <th>{{ 'Kontakt Person'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.kontaktPerson }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.hpNummer %}
+                            <tr>
+                                <th>{{ 'HP Nummer'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.hpNummer }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.lieferant %}
+                            <tr>
+                                <th>{{ 'Lieferant'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.lieferant }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.beiLieferantAngefragt %}
+                            <tr>
+                                <th>{{ 'Bei Lieferant angefragt'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.beiLieferantAngefragt }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.ekPreis %}
+                            <tr>
+                                <th>{{ 'EK-Preis'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.ekPreis }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.angebotErstellt %}
+                            <tr>
+                                <th>{{ 'Angebot erstellt'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.angebotErstellt }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.angebotZuKunden %}
+                            <tr>
+                                <th>{{ 'Angebot zu Kunden'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.angebotZuKunden }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.kundeBestellt %}
+                            <tr>
+                                <th>{{ 'Kunde Bestellt'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.kundeBestellt }}</td>
+                            </tr>
+                        {% endif %}
+                        {% if entity.nichtMoglich %}
+                            <tr>
+                                <th>{{ 'Nicht Möglich'|trans }}&nbsp;&nbsp;</th>
+                                <td>{{ entity.nichtMoglich }}</td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="col-md-12">
+                <hr>
+            {% if historial|length > 0 %}
+                {% for h in historial %}
+                    <ul class="list-inline">
+                        <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                        <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                        <li><p>{{ h.action }}</p></li></ul>
+                {% endfor %}
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

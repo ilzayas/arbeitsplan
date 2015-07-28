@@ -1,0 +1,59 @@
+{% extends '::principal.html.twig' %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/collapse.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap-editable.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery.tabledit.min.js') }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top'
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block body -%}
+        <div class='panel panel-info'>
+            <div class="panel-heading">
+                <div class="panel-title"><strong>{{ "Kunden List"|trans }}</strong>
+                </div>
+            </div>    
+            <div  style="padding-top:10px" class="panel-body">
+                <table id="tablaClientes" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>{{ 'Name'|trans }}</th>
+                            <th>{{ 'Hinzugefügt von'|trans }}</th>
+                            <th>{{ 'Aktion'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for client in clients %}
+                            <tr id="{{ client.id }}">
+                                <td>{{ client.id }}</td>                               
+                                <td>{{ client.name }}</td>                                                                            
+                                <td>{{ client.userProject }}</td>
+                                <td><a class="btn btn-info" href="{{ path("ily", { 'id': client.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Abändern'|trans }}">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                    {% if client.isActive %}
+                                        <a class="btn btn-danger" href="{{ path("client_delete", { 'id': client.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Deaktivieren, nur für Admin'|trans }}" onclick="return confirm('Sind Sie sicher?')">
+                                            <span class="glyphicon glyphicon-lock"></span>
+                                        </a>
+                                    {% else %}
+                                        <a class="btn btn-success" href="{{ path("clientActivate", { 'id': client.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Aktivieren'|trans }}" onclick="return confirm('Sind Sie sicher?')">
+                                            <strong>A</strong>
+                                        </a>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+{% endblock %}

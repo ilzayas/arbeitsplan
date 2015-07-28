@@ -1,0 +1,87 @@
+
+{% block lateral %}
+    <div class="col-xs-2">
+        <div class="row">
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <div class="panel-title"><strong>{{ "Fokus"|trans }}</strong>
+                    </div>
+                    <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+                </div>
+                <li class="list-group-item text-warning">
+                    <span class="glyphicon glyphicon-list-alt"><a href="{{ path("tasklist") }}">{{ ' Alle Aufgaben'|trans }}</a></span>
+                    <span class="badge badge-success pull-right">{{ alle|length }}</span>
+                </li>
+                <li class="list-group-item text-danger">
+                    <span class="glyphicon glyphicon-time"><a href="{{ path("taskHeute") }}">{{ ' Heute'|trans }}</a></span>
+                    <span class="badge badge-important pull-right">{{ tasksHeute|length }}</span>
+                </li>
+                <li class="list-group-item text-success">
+                    <span class="glyphicon glyphicon-ok"><a href="{{ path("taskErledig") }}">{{ ' Erledigt'|trans }}</a></span>
+                    <span class="badge badge-success pull-right">{{ tasksErledig|length }}</span>
+                </li>
+            </div>
+        </div>
+        {#-- listen ----------------------------------------#}
+        <div class="row">
+            <div class="panel-group" id="accordion-listen" role="tablist" aria-multiselectable="true">
+                <div class="panel panel-info">
+                    <div class="panel-heading" role="tab" id="headingOne">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseListen" aria-expanded="true" aria-controls="collapseOne">
+                                <strong>{{ 'Listen'|trans }} </strong>
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseListen" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                        <div class="panel-body">
+                            <form class='form-inline' action='{{ path('client_create') }}' method='post'> 
+                                {% if formClient is defined %}
+                                    {{ form_enctype(formClient) }}
+                                    {{ form_widget(formClient.name,  { 'attr': {'class': 'form-control','placeholder':'Neue Listen'|trans } }) }}
+                                {% endif %}
+                                <div class="form-group">                                    
+                                    <input type="text" class="form-control" name="clientName" id="txt-neueListen" placeholder="{{ "Neue Listen"|trans }}" />
+                                    {# {{ form_widget(form.name) }}  {{ form_enctype(form) }}#}
+                                </div>
+                                <input id="btn-adicionarListen" class='btn btn-info' type='post' value={{ 'Speichern'|trans }}>
+                            </form>
+                            {#<button id="btn-adicionarListen" type="button" class="btn btn-info" method="submit" href="{{ path('client_create') }}">
+                                <span class="glyphicon glyphicon-plus-sign"></span>
+                            </button>#}
+                        </div>
+                    </div>
+                    <div class="list-group">
+                        <ul id="ul-lista"> {#---------------listar los clientes registrados#}
+                            {% for client in clients %}
+                                <li><a href="{{ path('tasksClient', { 'id': client.id }) }}">{{ client.name }}</a></li>                                
+                                {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock lateral %}
+
+<script>
+        //----------para desplegar las listas de tareas
+        $(function () {
+            $('.collapse').collapse({
+                toggle: true
+            });
+        });
+        //------------------funcion para adicionar Clientes
+        $(document).ready(function () {
+            $("#btn-adicionarListen").click(function () {
+                if ($("#txt-neueListen").val() !== "") {
+                    $("#ul-lista").append("<li>" + $("#txt-neueListen").val() + "</li>");
+                    $("#txt-neueListen").val("").focus();
+                }
+                else {
+                    $("#ul-lista").append("<li>" + "Neue Liste " + "</li>");
+                    $("#txt-neueListen").val("").focus();
+                }
+            });
+        });
+    </script>

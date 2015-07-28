@@ -1,0 +1,61 @@
+<script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}">
+    $('.dropdown-toggle').dropdown();
+    //('show.bs.dropdown', function () {
+    //$('.dropdown-toggle').shown().bs.dropdown();
+    // });
+</script>
+<nav class="navbar navbar-default" role='navigation'>
+    <!--div class="container-fluid"-->
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Project</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Fokus <b class="caret"></b></a>
+                <ul role='menu' class="dropdown-menu">                   
+                    <li><a href="{{ path("taskHeute") }}">{{ 'Heute'|trans }}</a></li>
+                    <li><a href="{{ path("taskErledig") }}">{{'Erledigt'|trans }}</a></li>
+                    <li><a href="{{ path("meinTask") }}">{{ 'Meine Aufgaben'|trans }}</a></li>
+                    <li><a href="{{ path("clientList") }}">{{ 'Kunden List'|trans }}</a></li>
+                    <li><a href="{{ path("taskVorDreiMon") }}">{{ 'Erledigte Aufgaben vor 3 Monaten'|trans }}</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Aufgaben <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path("task_new") }}">{{ 'Neue Aufgabe'|trans }}</a></li>
+                    <li><a href="{{ path("tasklist") }}">{{ 'List Aufgaben'|trans }}</a></li>
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Verwaltung von Benutzern <span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path("register") }}">{{ 'Neue Benutzer'|trans }}</a></li>
+                    <li><a href="{{ path("userList") }}">{{ 'Benutzerliste'|trans }}</a></li>
+                </ul>
+            </li>
+        </ul>
+        <form class="navbar-form navbar-right" role="search" action='{{ path("buscarTarea") }}' method="post">
+            <div class="form-group">                
+                <input type="text" name="buscar" class="form-control" placeholder={{ 'Suchen'|trans }} />
+            </div>
+            <input class='btn btn-default text-center' type='submit' value={{ 'Suchen'|trans }}> 
+        </form>
+    </div><!-- /.navbar-collapse -->
+    <!--/div><!-- /.container-fluid -->
+</nav>
+

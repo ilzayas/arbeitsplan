@@ -1,0 +1,62 @@
+{% extends '::login_layout.html.twig' %}
+
+{% block body %}
+
+    <div class='container'>
+        <div class='col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4'>
+            <div class='panel panel-info'>
+                <div class="panel-heading">
+                    <div class="panel-title">{{ "Neue Benutzer"|trans }}</div>
+                    <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+                </div>
+                {% if errors|length > 0 %}
+                    {% for error in errors %}
+                    <div class='alert alert-danger'>
+                        <ul class="error_list">
+                            
+                            <li><p class="text-danger">{{ error|trans }}</p></li>
+                            
+                        </ul>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+               {# {% if form_errors(form)%}
+                    <div class='alert alert-danger'>
+                        {{ form_errors(form)|trans }}
+                        {{ form_errors(form.password.pass) }}
+                        {{ form_errors(form.password.confirm) }}
+                    </div>
+                {% endif %}#}
+                <div class='panel-body'>
+                    <form class='form-horizontal' action='{{ path("register") }}' method='post' {{ form_enctype(form) }}>
+                        <div class='form-group'>
+                            {{ form_widget(form.name,  { 'attr': {'class': 'form-control','placeholder':'Name'|trans } }) }}
+                        </div>
+                        <div class='form-group'>
+                            {{ form_widget(form.lastName,  { 'attr': {'class': 'form-control','placeholder':'Vorname'} }) }}
+                        </div>
+                        <div class='form-group'>
+                            {{ form_widget(form.country,  { 'attr': {'class': 'form-control','placeholder':'Select a Land'} }) }}
+                        </div>
+                        <div class='form-group'>
+                            {{ form_widget(form.email,  { 'attr': {'class': 'form-control','placeholder':'E-Mail'|trans} }) }}
+                        </div>
+                        <div class='form-group'>
+                            {{ form_widget(form.username,  { 'attr': {'class': 'form-control','placeholder':'Benutzer'|trans} }) }}
+                        </div>
+                        <div class='form-group'>
+                            {{ form_widget(form.password.pass,  { 'attr': {'class': 'form-control','placeholder':'Passwort'|trans} }) }}
+                        </div>
+                        <div class="form-group">
+                            {{ form_widget(form.password.confirm,  { 'attr': {'class': 'form-control','placeholder':'Repeat Passwort'|trans} }) }}
+                        </div>
+                        <hr>
+                        <input class='btn btn-primary text-center' type='submit' value={{ 'Registrieren'|trans }}>
+                        <a class="btn btn-info" href="{{ path("login") }}">{{ 'Abbrechen'|trans }}</a>
+                        {{ form_rest(form) }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

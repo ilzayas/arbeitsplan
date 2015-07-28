@@ -1,0 +1,7 @@
+parameters:
+#    proyecto_security.example.class: Proyecto\SecurityBundle\Example
+
+services:
+#    proyecto_security.example:
+#        class: %proyecto_security.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

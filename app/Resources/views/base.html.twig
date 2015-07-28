@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}{{ 'Arbeitsplan'|trans }}{% endblock %}</title>
+        <link href="{{ asset('bundles/tarea/css/datepicker.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/tarea/css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/tarea/css/banner.css') }}" type="text/css" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('HP3.png') }}" />
+        <div>
+        
+        </div>
+    </head>
+<body>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <header>
+        <link href="{{ asset('bundles/tarea/css/bootstrap.css') }}" rel="stylesheet">
+        <link href="{{ asset('bundles/tarea/css/aside-style.css') }}" type="text/css" rel="stylesheet">
+        {% include 'baner.html.twig' %}             
+    </header>
+    <nav>
+    {% block nav %}{% include 'menu.html.twig' %}{% endblock %}
+    </nav>
+    <div class="row">
+    <div class="container-fluid">
+        <div class="row">
+        {% block js %}{% endblock %}
+        <aside class="col-md-2">{{ render(controller('TareaBundle:Default:lateral')) }}
+        {% block lateral %}{% endblock %}
+        </aside>
+        <section class="container col-md-10">            
+            {% block body %}{% endblock %}            
+        </section>
+        </div>
+    </div>
+    </div>
+    <footer>
+        <hr>
+        <small>Copy rigth &copy 2015</small>
+    </footer>
+</body>
+</html>
+
+
+

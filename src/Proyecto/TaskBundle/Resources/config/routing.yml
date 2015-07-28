@@ -1,0 +1,115 @@
+task_show:
+    pattern: /taskShow/{id}
+    defaults: { _controller: TareaBundle:Task:show }
+        
+task_new:
+    pattern: /neuTask
+    defaults: { _controller: TareaBundle:Task:registrarTarea }
+        
+taskIly:
+    pattern: /taskEditIly/{id}
+    defaults: { _controller: TareaBundle:Task:taskEdit }
+    
+task_edit:
+    pattern: /taskEdit/{id}
+    defaults: { _controller: TareaBundle:Task:edit }
+    
+task_update:
+    pattern: /taskEdit/{id}
+    defaults: { _controller: TareaBundle:Task:update }
+    
+task_delete:
+    pattern: /taskDelete/{id}
+    defaults: { _controller: TareaBundle:Task:borrar }
+    
+eliminarTodas:
+    pattern: /deleteAlles
+    defaults: { _controller: TareaBundle:Task:deleteAlles }
+    
+tasklist:
+    pattern: /listTasks
+    defaults: { _controller: TareaBundle:Task:index }
+    
+taskAlle:
+    pattern: /alle
+    defaults: { _controller: TareaBundle:Task:listAlle }
+ 
+taskHeute:
+    pattern: /heute
+    defaults: { _controller: TareaBundle:Task:listTasksHeute }
+        
+taskErledig:
+    pattern: /erledig
+    defaults: { _controller: TareaBundle:Task:listTasksErledigPage }
+   
+client_create:
+    pattern: /neuClient
+    defaults: { _controller: TareaBundle:Client:registrarCliente }
+    
+client_delete:
+    pattern: /clientDelete/{id}
+    defaults: { _controller: TareaBundle:Client:borrar }
+    
+client_edit:
+    pattern: /clientEdit/{id}
+    defaults: { _controller: TareaBundle:Client:clientEdit }
+    
+#iliananiehus:
+#    pattern: /ilyNiehus/{id}
+#    defaults: { _controller: TareaBundle:Client:ilyEdit }
+    
+#client_update:
+#    pattern: /clientEdit/{id}
+#    defaults: { _controller: TareaBundle:Client:update }
+    
+client_show:
+    pattern: /showClient/{id}
+    defaults: { _controller: TareaBundle:Client:show }
+    
+clientList:
+    pattern: /listClient
+    defaults: { _controller: TareaBundle:Client:listClient }
+    
+tasksClient:
+    pattern: /tasksClient/{id}
+    defaults: { _controller: TareaBundle:Task:listTasksDadoCliente }
+    
+buscarTarea:
+    pattern: /buscar
+    defaults: { _controller: TareaBundle:Task:buscarTarea }   
+    
+meinTask:
+    pattern: /meineAufgaben
+    defaults: { _controller: TareaBundle:Task:misTareas }
+    
+taskVorDreiMon:
+    pattern: /VorDreiMonFertig
+    defaults: { _controller: TareaBundle:Task:tareasDreiMonFertig }
+
+export:
+    pattern: /export
+    defaults: { _controller: TareaBundle:Task:export }
+    
+fertig:
+    pattern: /fertig/{id}
+    defaults: { _controller: TareaBundle:Task:fertig }
+#upload:
+#    pattern: /upload
+#    defaults: { _controller: TareaBundle:Default:upload }
+       
+ily:
+    pattern: /clientIly/{id}
+    defaults: { _controller: TareaBundle:Client:editIly }
+    
+clientActivate:
+    pattern: /clientActivate/{id}
+    defaults: { _controller: TareaBundle:Client:activar }
+    
+#este lo hice para probar subir archivo cuando se modifica una tarea
+subirArchivoExtra:
+    pattern: /subirArchivo/{id}
+    defaults: { _controller: TareaBundle:Task:subirExtra }
+       
+#taskFile:
+#    pattern: /file/{id}
+#    defaults: { _controller: TareaBundle:Task:getFile }

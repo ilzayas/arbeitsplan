@@ -1,0 +1,228 @@
+{% extends '::sinLateral.html.twig' %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery-1.9.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/jquery.fileinput.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('bundles/tarea/js/bootstrap-datepicker.js') }}"></script>
+    <script type="text/javascript">
+        var date = new Date();
+        date.setDate(date.getDate());
+        // When the document is ready
+        $(document).ready(function () {
+            $('#fechaI').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true
+            });
+            //date = $("#fechaI").data('date');
+            //date.setDate($("#fechaI").valueOf());
+            $('#fechaF').datepicker({
+                format: "dd/mm/yyyy",
+                autoclose: true,
+                startDate: date
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('[data-toggle="tooltip"]').tooltip({
+                placement: 'top'
+            });
+        });
+    </script>
+    <script type="text/javascript">
+        // $(document).ready(function () {
+        //   $('input[type="checkbox"]').click(function () {
+        //     if ($(this).attr("value") === "users") {
+        //       $("#mostrarUser").toggle();
+        // }
+        //if ($(this).attr("value") === "option") {
+        //  $("#mostrarOpciones").toggle();
+        // }
+        // });
+        //  });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btn-addTag").click(function () {
+                if ($("#txt-tag").val() !== "") {
+                    $("#ul-tags").append("<span class='label label-default'>" + $("#txt-tag").val() + "</span>");
+                    $("#txt-tag").val("").focus();
+                }
+            });
+        });
+    </script>    
+    <script type="text/javascript">//para insertar mas archivos adjuntos
+        $(document).ready(function () {
+            num = 0;
+            $("#btn-addFile").click(function () {
+                num++;
+                nameFile = num;
+                contenedor = document.createElement('ul');
+                contenedor.className = 'list-inline';
+                contenedor.id = num;
+
+                listInput = document.createElement('li');
+                archivo = document.createElement('input');
+                archivo.type = 'file';
+                archivo.name = nameFile;
+                listInput.appendChild(archivo);
+
+                listGlyphicon = document.createElement('li');
+                gly = document.createElement('span');
+                gly.className = 'glyphicon glyphicon-minus-sign';
+                //gly.id = 'gly' + num;
+                gly.id = num;
+                listGlyphicon.appendChild(gly);
+
+                contenedor.appendChild(listInput);
+                contenedor.appendChild(listGlyphicon);
+                $("#divFile").append(contenedor);
+                //$("#divFile").append("<ul class='list-inline'><li><input type='file' name=nameFile></li><li><a><span class='glyphicon glyphicon-minus-sign'></span></a></li></ul>");        
+                $(".glyphicon-minus-sign").click(function () {
+                    m = $(this).parent();
+                    y = m.parent();
+                    y.remove();
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">//para insertar mas archivos adjuntos
+        $(document).ready(function () {
+            $(".glyphicon-minus-sign").click(function () {
+                id = $(".glyphicon-minus-sign").getAttribute('ID');
+                //id = $(".glyphicon-minus-sign").get
+                elem = document.getElementById(id);
+                $("#divFile").removeChild(elem);
+            });
+        });
+    </script>
+{% endblock %}
+
+{% block stylesheets %}
+    <link href="{{ asset('bundles/tarea/css/bootstrap.css') }}" type="text/css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ asset('bundles/tarea/css/daterangepicker-bs3.css') }}">
+{% endblock %}
+
+{% block body -%}
+    <div class='container'>
+        <div id="neutask" class="mainbox col-md-10"> 
+            <div class='panel panel-info'>
+                <div class="panel-heading">
+                    <div class="panel-title">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#info-tab" data-toggle="tab"><strong>{{ "Neue Aufgabe"|trans }}</strong><i class="fa"></i></a></li>
+                            <li><a href="#otros-tab" data-toggle="tab">{{ "Andere Informationen"|trans }} <i class="fa"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% if form_errors(form)%}
+                    <div class='alert alert-danger'>
+                        {{ form_errors(form)|trans }}
+                    {% endif %}
+                    <div style="padding-top:10px" class="panel-body">
+                        <div style="display:none" id="login-alert" class="alert alert-danger col-md-10"></div>
+                        <form role='form' action='{{ path("task_new") }}' method='post' {{ form_enctype(form) }}> 
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="info-tab">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                {{ form_widget(form.name,  { 'attr': {'class': 'form-control','placeholder':'Name'|trans } }) }}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                                <a data-toggle="tooltip" data-original-title="{{ 'Wählen Sie ein Kunde'|trans }}">
+                                                    {{ form_widget(form.client,  { 'attr': {'class': 'form-control','placeholder':'Kunden'|trans } }) }}
+                                                </a>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">{{ form_widget(form.erledig) }}&nbsp;<label>&nbsp;{{ 'Erledig'|trans }}</label>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-md-6" id="divFile">
+                                            {{ form_widget(form.file, { 'attr': {'class': 'file'}}) }}
+                                            <ul class="list-inline">
+                                                <li><input type="file" id="inputFile" name="archivo"></li>
+                                                <li><a id="btn-addFile" data-toggle="tooltip" data-original-title="{{ 'Fügen Sie mehr Dateien'|trans }}">
+                                                        <span class="glyphicon glyphicon-plus-sign"></span></a></li>
+                                            </ul>
+                                        </div>                                                        
+                                        {#<div class="col-md-1 inline">
+                                            {#{{ form_label(form.tags) }}#}
+                                        {#<button id="btn-addTag">
+                                            <span class="glyphicon glyphicon-plus-sign"></span>
+                                        </button>                                                                                 
+                                    </div>
+                                    <div class="col-md-2">
+                                        <input type="text" class="form-control" name="name" id="txt-tag" />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <ul id="ul-tags" class="list-inline"></ul>
+                                        <span class="label label-default">{#{{ form_widget(form.tags) }}#}</span>
+                                        {#</div>#}
+                                    </div>        
+                                    <div class="row">                                              
+                                        <fieldset>
+                                            <div class="col-md-6">
+                                                <div class="form-group">{{ form_widget(form.teil,  { 'attr': {'class': 'form-control','placeholder':'Teil / Bezeichnung'|trans } }) }}</div>
+                                                <div class="form-group">{{ form_widget(form.notas,  { 'attr': {'class': 'form-control','placeholder':'Notizen'|trans } }) }}</div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="input-append date" id="fechaI">
+                                                    {{ form_widget(form.beginningDate, { 'attr': {'class': 'datepicker',  'placeholder':'Start'|trans}}) }}
+                                                    <span class="add-on"> 
+                                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-append date" id="fechaF">
+                                                    {{ form_widget(form.endingDate, { 'attr': {'class': 'datepicker',  'placeholder':'Fallig'|trans}}) }}
+                                                    <span class="add-on"> 
+                                                        <i data-time-icon="icon-time" data-date-icon="icon-calendar"></i>
+                                                    </span>
+                                                </div>
+                                                <div class="input-group">
+                                                    <fieldset>
+                                                        <h5><strong>{{ 'Einem anderen Benutzer vergeben:'|trans }}</strong></h5>
+                                                        {{ form_widget(form.users,  { 'attr': {'class': 'form-control','placeholder':'Benutzer'|trans } }) }}
+                                                    </fieldset>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                {{ form_widget(form.kontaktPerson, { 'attr': {'class': 'form-control',  'placeholder':'Kontakt Person'|trans } }) }}                                        
+                                                {{ form_widget(form.hpNummer, { 'attr': {'class': 'form-control',  'placeholder':'HP Nummer'|trans } }) }}                                        
+                                                {{ form_widget(form.lieferant, { 'attr': {'class': 'form-control',  'placeholder':'Lieferant'|trans } }) }}                                  
+                                            </div>
+                                        </fieldset>
+                                    </div><!-- /.row de tag y fecha de inicio-->
+                                </div>
+                                <div class="tab-pane" id="otros-tab">
+                                    <fieldset>
+                                        <div class="col-md-4">
+                                            <div class="form-group">{{ form_widget(form.beiLieferantAngefragt,  { 'attr': {'class': 'form-control','placeholder':'Bei Lieferant Angefragt'|trans } }) }}</div>
+                                            <div class="form-group">{{ form_widget(form.ekPreis,  { 'attr': {'class': 'form-control','placeholder':'EK Preis'|trans } }) }}</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">{{ form_widget(form.angebotErstellt,  { 'attr': {'class': 'form-control','placeholder':'Angebot Erstellt'|trans } }) }}</div>
+                                            <div class="form-group">{{ form_widget(form.angebotZuKunden,  { 'attr': {'class': 'form-control','placeholder':'Angebot zu Kunden'|trans } }) }}</div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">{{ form_widget(form.kundeBestellt,  { 'attr': {'class': 'form-control','placeholder':'Kunde Bestellt'|trans } }) }}</div>
+                                            <div class="form-group">{{ form_widget(form.nichtMoglich,  { 'attr': {'class': 'form-control','placeholder':'Nicht möglich'|trans } }) }}</div>
+                                        </div>
+                                    </fieldset>
+                                </div>
+                            </div><hr>
+                            <div class="col-md-4 col-md-offset-4">
+                                <input class='btn btn-primary' type='submit' value={{ 'Speichern'|trans }}>&nbsp;&nbsp;
+                                <a class="btn btn-info" href="{{ path("tasklist") }}">{{ 'Abbrechen'|trans }}</a></div>
+                                {{ form_rest(form) }}
+                        </form>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
