@@ -4,7 +4,7 @@
     //$('.dropdown-toggle').shown().bs.dropdown();
     // });
 </script>
-<nav class="navbar navbar-default" role='navigation'>
+<nav class="navbar navbar-default" role='navigation' style="margin-bottom: 5px;margin-top: 5px">
     <!--div class="container-fluid"-->
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -26,26 +26,43 @@
                     <li><a href="{{ path("taskHeute") }}">{{ 'Heute'|trans }}</a></li>
                     <li><a href="{{ path("taskErledig") }}">{{'Erledigt'|trans }}</a></li>
                     <li><a href="{{ path("meinTask") }}">{{ 'Meine Aufgaben'|trans }}</a></li>
-                    <li><a href="{{ path("clientList") }}">{{ 'Kunden List'|trans }}</a></li>
-                    <li><a href="{{ path("taskVorDreiMon") }}">{{ 'Erledigte Aufgaben vor 3 Monaten'|trans }}</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path("taskAlle") }}">{{ 'Alle Aufgaben'|trans }}</a></li>
+                    {% endif %}
                 </ul>
             </li>
         </ul>
         <ul class="nav navbar-nav">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Aufgaben <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ 'Aufgaben'|trans }}<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
-                    <li><a href="{{ path("task_new") }}">{{ 'Neue Aufgabe'|trans }}</a></li>
-                    <li><a href="{{ path("tasklist") }}">{{ 'List Aufgaben'|trans }}</a></li>
+                    <li><a href="{{ path("taskNew") }}">{{ 'Neue Aufgabe'|trans }}</a></li>
+                    <li><a href="{{ path("taskList") }}">{{ 'List Aufgaben'|trans }}</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path("taskVorDreiMon") }}">{{ 'Erledigte Aufgaben vor 3 Monaten'|trans }}</a></li>
+                    {% endif %}
                 </ul>
             </li>
         </ul>
         <ul class="nav navbar-nav">
             <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Verwaltung von Benutzern <span class="caret"></span></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ 'Verwaltung von Benutzern'|trans }}<span class="caret"></span></a>
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{{ path("register") }}">{{ 'Neue Benutzer'|trans }}</a></li>
-                    <li><a href="{{ path("userList") }}">{{ 'Benutzerliste'|trans }}</a></li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li><a href="{{ path("userList") }}">{{ 'Benutzerliste'|trans }}</a></li>
+                        {% endif %}
+                </ul>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav">
+            <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">{{ 'Kunden'|trans }}<span class="caret"></span></a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{{ path("clientCreate") }}">{{ 'Neue Kunde'|trans }}</a></li>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <li><a href="{{ path("clientList") }}">{{ 'Kunden List'|trans }}</a></li>
+                    {% endif %}
                 </ul>
             </li>
         </ul>

@@ -13,10 +13,10 @@
 
 {% endblock %}
 {% block body -%}
-    <div class='panel panel-info'>
+    <div class='panel panel-primary'>
         <div class="panel-heading">
             <div class="panel-title"><strong>Id:{{ entity.id }}&nbsp;<u>{{ entity.name }}</u>&nbsp;</strong>
-                <a class="pull-right" href="{{ path('taskIly', { 'id': entity.id }) }}">
+                <a class="pull-right" href="{{ path('taskEdit', { 'id': entity.id }) }}">
                     <span class="glyphicon glyphicon-edit"></span>&nbsp;{{ 'Abändern'|trans }}</a>
             </div>
             <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>

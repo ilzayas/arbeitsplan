@@ -165,7 +165,8 @@ class UserProject implements AdvancedUserInterface, \Serializable
     public function getRoles()
     {
         //return $this->rol;
-         return array('ROLE_USER');
+         //return array('ROLE_USER');
+         return explode(' ', $this->rol);
     }
     
     /**

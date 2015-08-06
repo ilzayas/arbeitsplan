@@ -13,10 +13,10 @@
 {% endblock %}
 {% block body -%}
     {#<div class="col-xs-10">#}
-        <div class='panel panel-info'>
+        <div class='panel panel-primary'>
             <div class="panel-heading">
                 <div class="panel-title"><strong>{{ "Benutzerliste"|trans }}&nbsp;</strong>
-                    <a class="pull-right" href="{{ path("register") }}"><span class="glyphicon glyphicon-plus-sign"></span> Neue Benutzer </a>
+                    <a class="pull-right" href="{{ path("register") }}"><span class="glyphicon glyphicon-plus-sign"></span>&nbsp;<strong>{{ 'Neue Benutzer'|trans }}</strong></a>
                 </div>
                 <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
             </div> 
@@ -65,7 +65,7 @@
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="btn btn-primary" href="{{ path('userEditIly', { 'id': entity.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Abändern'|trans }}">
+                                            <a class="btn btn-primary" href="{{ path('userEdit', { 'id': entity.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Abändern'|trans }}">
                                                 <span class="glyphicon glyphicon-edit"></span>
                                             </a>
                                         </li>

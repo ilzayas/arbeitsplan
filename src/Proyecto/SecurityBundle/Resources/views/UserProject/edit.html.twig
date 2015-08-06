@@ -13,10 +13,10 @@
 {% endblock %}
 {% block body -%}
     <div class="col-xs-10">
-        <div class='panel panel-info'>
+        <div class='panel panel-primary'>
             <div class="panel-heading">
                 <div class="panel-title">
-                    <strong>{{ "Benutzer"|trans }}&nbsp;<em>{{ entity.username }}</em>&nbsp;{{ "bearbeiten"|trans }}</strong>
+                    <strong>{{ "Benutzer"|trans }}&nbsp;<em>{{ entity.username }}</em>&nbsp;{{ "abändern"|trans }}</strong>
                 </div>
                 <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
             </div> 
@@ -32,7 +32,7 @@
                 {% endfor %}
             {% endif %}
             <div class='panel-body'>
-                <form role='form' action='{{ path("userEditIly", { 'id': entity.id }) }}' method='post' {{ form_enctype(edit_form) }}> 
+                <form role='form' action='{{ path("userEdit", { 'id': entity.id }) }}' method='post' {{ form_enctype(edit_form) }}> 
                     {# {{ form(edit_form) }}#}
                     <div class="form-group"><a  data-toggle="tooltip" data-original-title="{{ 'Benutzer'|trans }}">
                         {{ form_widget(edit_form.username,  { 'attr': {'class': 'form-control' } }) }}

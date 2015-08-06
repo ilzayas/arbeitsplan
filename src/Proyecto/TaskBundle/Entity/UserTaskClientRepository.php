@@ -67,4 +67,11 @@ class UserTaskClientRepository extends EntityRepository
         $tasks = $dql->getResult();
         return $tasks;
     }
+    
+    public function listaClientesDadoUserM($idUser){
+        $dql = $this->getEntityManager()->createQuery("SELECT c FROM TareaBundle:Client c JOIN TareaBundle:UserTaskClient t WHERE c.id = t.client AND (t.user = :user_id OR c.userProject = :user_id) AND c.isActive = 1");
+        $dql->setParameter('user_id', $idUser);
+        $clients = $dql->getResult();
+        return $clients;
+    }
 }

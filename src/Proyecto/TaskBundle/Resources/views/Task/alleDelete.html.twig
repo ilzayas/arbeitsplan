@@ -21,33 +21,33 @@
 {% endblock %}
 
 {% block body -%}
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <div class="panel-title"><strong>{{ pagename|trans }}</strong>
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <div class="panel-title"><strong>{{ pagename|trans }}</strong>
                     {% if tasks|length > 0 %}
-                        <a class="pull-right" href="{{ path("eliminarTodas") }}"><span class="glyphicon glyphicon-alert">&nbsp;</span>{{ 'Alles löschen'|trans }}</a>
-                    {% endif %}
-                </div>
-                <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+                    <a class="pull-right" href="{{ path("eliminarTodas") }}" onclick="return confirm('Zu löschen?')"><span class="glyphicon glyphicon-alert">&nbsp;</span>{{ 'Alles löschen'|trans }}</a>
+                {% endif %}
             </div>
-            {% if tasks|length > 0 %}
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-                    {% for task in tasks %}
-                        <div class="panel">
-                            <div class="panel-heading" role="tab" id="headingOne">
-                                <h4 class="panel-title">
-                                    <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
-                                        {% if task.erledig %}<input type="radio" checked>&nbsp;
-                                        {% else %}<input type="radio">&nbsp;{% endif %}
-                                    </a>
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
-                                        <strong>{{ task.id }}</strong>&nbsp;
-                                        <strong>{{ task.name }}</strong></a>
-                                    <small class="pull-right">
-                                        {% if task.tags|length > 0 %}<ul class="list-inline">
+            <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
+        </div>
+        {% if tasks|length > 0 %}
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                {% for task in tasks %}
+                    <div class="panel">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title">
+                                <a href="{{ path('fertig', { 'id': task.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Fertig'|trans }}">
+                                    {% if task.erledig %}<input type="radio" checked>&nbsp;
+                                    {% else %}<input type="radio">&nbsp;{% endif %}
+                                </a>
+                                <a data-toggle="collapse" data-parent="#accordion" href="#{{ task.id }}" aria-expanded="true" aria-controls="collapseOne">
+                                    <strong>{{ task.id }}</strong>&nbsp;
+                                    <strong>{{ task.name }}</strong></a>
+                                <small class="pull-right">
+                                    {% if task.tags|length > 0 %}<ul class="list-inline">
                                             {% for t in task.tags %}
                                                 <li><span class="label label-primary">{{ t.tag.name }}</span></li>
-                                            {% endfor %}
+                                                {% endfor %}
                                         </ul>{% endif %}
                                         <em class="text-success">{% if task.beginningDate %}{{ task.beginningDate|date("F j, Y") }} -{% endif %}</em>
                                         {% if task.endingDate %}<em class="text-danger">{{ task.endingDate|date("F j, Y") }}</em>{% endif %}</small>                                
@@ -55,48 +55,50 @@
                             </div>
                             <div id="{{ task.id }}" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
                                 <div class="panel-body">
-                                    <style>blockquote{
-                                           {# border-left: 5px solid #{{ task.client.color }};#}
+                                    <style>blockquote[id|="{{ task.id }}"]{
+                                            border-left: 5px solid #{{ task.client.color }};
                                             font-size: 90%;
                                         }
                                     </style>
-                                    <blockquote>                                                        
+                                    <blockquote id='{{ task.id }}'>                                                        
                                         <ul class="list-inline">
                                             {% if task.teil %}<li><i class="glyphicon glyphicon-edit"></i></li>
                                                 <li><p>{{ task.teil|trans }}</p></li>{% endif %}
-                                                <li class="pull-right"><a  href="{{ path('taskIly', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
-                                                <li class="pull-right"><a  href="{{ path('task_show', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
-                                                <li class="pull-right"><a  href="{{ path('task_delete', { 'id': task.id }) }}"><strong>{{ 'Löschen'|trans }}</strong></a></li>
-                                        </ul>
-                                        {% if task.file|length > 0 %}
-                                            <ul class="list-inline">
-                                                <li><i class="glyphicon glyphicon-paperclip"></i></li>
-                                                {% for file in task.file %}
-                                                    <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
-                                                {% endfor %}
+                                                <li class="pull-right"><a  href="{{ path('taskEdit', { 'id': task.id }) }}"><strong><u>{{ 'Abändern'|trans }}</u></strong></a></li>
+                                                <li class="pull-right"><a  href="{{ path('taskShow', { 'id': task.id }) }}"><strong><u>{{ 'Siehe Aufgabe'|trans }}</u></strong></a></li>
+                                                <li class="pull-right"><a  href="{{ path('taskDelete', { 'id': task.id }) }}" onclick="return confirm('Zu löschen?')">
+                                                        <strong><u>{{ 'Löschen'|trans }}</u></strong></a>
+                                                </li>
                                             </ul>
-                                        {% endif %}
-                                        {% if task.notas %}<ul class="list-inline">
-                                            <li><i class="glyphicon glyphicon-edit"></i></li>
-                                            <li><p>{{ task.notas|trans }}</p></li>
-                                        </ul>{% endif %}
-                                        <hr>                                                                
-                                        {% if task.history|length > 0 %}
-                                            {% for h in task.history %}
+                                            {% if task.file|length > 0 %}
                                                 <ul class="list-inline">
-                                                    <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
-                                                    <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
-                                                    <li><p>{{ h.action }}</p></li></ul>
-                                            {% endfor %}
-                                        {% endif %}                                                                
-                                    </blockquote>
+                                                    <li><i class="glyphicon glyphicon-paperclip"></i></li>
+                                                        {% for file in task.file %}
+                                                        <li><a  href="{{ asset('uploads/documents/'~ file.path) }}">{{ file.name }}</a></li>&nbsp;
+                                                        {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                            {% if task.notas %}<ul class="list-inline">
+                                                    <li><i class="glyphicon glyphicon-edit"></i></li>
+                                                    <li><p>{{ task.notas|trans }}</p></li>
+                                                </ul>{% endif %}
+                                                <hr>                                                                
+                                                {% if task.history|length > 0 %}
+                                                    {% for h in task.history %}
+                                                        <ul class="list-inline">
+                                                            <li><p>{{ h.userProject.name }}</p></li><li><p>{{ 'am'|trans }}</p></li>
+                                                            <li>{{ h.beginningDate|date('d/m/Y') }}:</li>
+                                                            <li><p>{{ h.action }}</p></li></ul>
+                                                                {% endfor %}
+                                                            {% endif %}                                                                
+                                            </blockquote>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% else %}
-                    <em>{{ "Kein task"|trans }}</em>
-                {% endif %}
-            </div>
-        </div>
-{% endblock %}
+                                {% endfor %}
+                                    {% else %}
+                                        <em>{{ "Kein task"|trans }}</em>
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    {% endblock %}

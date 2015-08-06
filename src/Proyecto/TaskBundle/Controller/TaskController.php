@@ -96,7 +96,7 @@ class TaskController extends Controller {
                     $em->persist($userTC);
                 }
                 $em->flush();
-                return $this->redirect($this->generateUrl("tasklist"));
+                return $this->redirect($this->generateUrl("taskList"));
             }
         }
         return $this->render('TareaBundle:Task:new.html.twig', array('form' => $form->createView()));
@@ -189,10 +189,8 @@ class TaskController extends Controller {
     public function subirExtraAction($id) {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('TareaBundle:Task')->find($id);
-        $request = $this->getRequest();
-        //$file = $request->files->get('archivo');  
+        $request = $this->getRequest(); 
         $file = $request->files;
-        //foreach ($nuevoFile as $key) {
         if ($file != null) {
             $document = new Document();
             $document->setTask($entity);
@@ -202,7 +200,6 @@ class TaskController extends Controller {
         } else {
             throw $this->createNotFoundException('No se ha seleccionado ningun fichero');
         }
-        // }
         $em->flush();
         return $this->redirect($request->server->get('HTTP_REFERER'));
     }
@@ -224,96 +221,8 @@ class TaskController extends Controller {
         return array(
             'entity' => $entity,
             'historial' => $historiales,
-            //'delete_form' => $editForm->createView(),
         );
     }
-
-    /**
-     * Displays a form to edit an existing Task entity.
-     *
-     * @Route("/{id}/edit", name="task_edit")
-     * @Method("GET")
-     * @Template()
-     */
-//    public function editAction($id) {
-//        $em = $this->getDoctrine()->getManager();
-//        $entity = $em->getRepository('TareaBundle:Task')->find($id);
-//
-//        if (!$entity) {
-//            throw $this->createNotFoundException('Unable to find Task entity.');
-//        }
-//
-//        $editForm = $this->createEditForm($entity);
-//        //$deleteForm = $this->createDeleteForm($id);
-//
-//        return array(
-//            'entity' => $entity,
-//            'edit_form' => $editForm->createView(),
-//                //'delete_form' => $deleteForm->createView(),
-//        );
-//    }
-
-    /**
-     * Creates a form to edit a Task entity.
-     *
-     * @param Task $entity The entity
-     *
-     * @return \Symfony\Component\Form\Form The form
-     */
-//    private function createEditForm(Task $entity) {
-//        $form = $this->createForm(new TaskType(), $entity, array(
-//            'action' => $this->generateUrl('task_update', array('id' => $entity->getId())),
-//            'method' => 'PUT',
-//        ));
-//
-//         $form->add('submit', 'submit', array('label' => 'Aktualiezieren'));
-//
-//        return $form;
-//    }
-
-    /**
-     * Edits an existing Task entity.
-     *
-     * @Route("/{id}", name="task_update")
-     * @Method("PUT")
-     * @Template("TareaBundle:Task:edit.html.twig")
-     */
-//    public function updateAction($id) {
-//        $request = $this->getRequest();
-//        $em = $this->getDoctrine()->getManager();
-//        $entity = $em->getRepository('TareaBundle:Task')->find($id);
-//        $history = new History();
-//        $bDate = new \DateTime("now");
-//        $user = $this->container->get('security.context')->getToken()->getUser();
-//
-//        $originalUsers = new ArrayCollection();
-//
-//        // Create an ArrayCollection of the current Tag objects in the database
-//        foreach ($entity->getUsers() as $user) {
-//            $originalUsers->add($user);
-//        }
-//        //$users = $this->getUsers();
-//        //$editForm = $this->createForm(new TaskType(), $entity);
-//        $editForm = $this->createEditForm($entity);
-////        print_r("hallo");
-////        die();
-//        $editForm->handleRequest($request);
-//        //if ($request->getMethod() == 'POST') {
-//            //$editForm->bind($request);
-//            if ($editForm->isValid()) {
-//                $entity->addHistory($history, "Modifiziert", $bDate, null, $user);
-//               // $em->persist($entity);
-//                $em->persist($history);
-//                $em->flush();
-//                return $this->redirect($this->generateUrl('tasklist'));
-//            }
-//        //}
-//        return $this->render('TareaBundle:Task:edit.html.twig', array(
-//                    'entity' => $entity,
-//                    'edit_form' => $editForm->createView(),
-//                        // 'delete_form' => $deleteForm->createView(),
-//        ));
-//    }
 
     /*     * *****************************************
      * Edits an existing Task entity, hecho por ily para probar edicion.***********************************************
@@ -348,7 +257,7 @@ class TaskController extends Controller {
             $em->persist($history);
             $em->persist($entity);
             $em->flush();
-            return $this->redirect($this->generateUrl('tasklist'));
+            return $this->redirect($this->generateUrl('taskList'));
         } else {
             $errors = $editForm->getErrors();
         }
@@ -536,23 +445,12 @@ class TaskController extends Controller {
 
     //***************** tareas terminadas hace 3 meses
     public function tareasDreiMonFertigAction() {
-        $request = $this->getRequest();
-        $user = $this->container->get('security.context')->getToken()->getUser();
-        $rolU = $user->getRol()->getRol();
-        $session = $request->getSession();
-
-        if ($rolU == 'ROLE_USER') {
-            $session->getFlashBag()->set('error_msg', "Sie haben keine Berechtigung, um diese Aktion durchzuführen!");
-            return $this->redirect($request->server->get('HTTP_REFERER'));
-            //throw new Exception('Sie haben keine Berechtigung, um diese Aktion durchzuführen');
-        } else {
             $tasks = $this->get('paraLateral')->servicioTareasTerminadasHaceTresMon();
             $pagename = 'Erledigte Aufgaben vor 3 Monaten';
             return $this->render('TareaBundle:Task:alleDelete.html.twig', array(
                         'tasks' => $tasks,
                         'pagename' => $pagename,
             ));
-        }
     }
 
     //************************** fin de reportes

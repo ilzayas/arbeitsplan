@@ -27,7 +27,7 @@ class LateralService {
     }
     
     public function servicioClientesDadoUser($idUser){
-        $clients = $this->doctrine->getRepository('TareaBundle:Client')->listaClientesDadoUser($idUser);
+        $clients = $this->doctrine->getRepository('TareaBundle:UserTaskClient')->listaClientesDadoUserM($idUser);
         return $clients;
     }
     

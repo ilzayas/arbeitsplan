@@ -61,7 +61,7 @@ class ClientController extends Controller {
                 $client->setIsActive(true);              
                 $em->persist($client);
                 $em->flush();
-                return $this->redirect($this->generateUrl("tasklist"));
+                return $this->redirect($this->generateUrl("taskList"));
             }
         }
        return $this->render('TareaBundle:Client:new.html.twig', array('formClient' => $formClient->createView()));            
@@ -306,9 +306,9 @@ class ClientController extends Controller {
 //    }
     
     /**
-     * Edits an existing UserProject entity, hecho por ily para probar edicion.
+     * Edits an existing Client entity, hecho por ily para probar edicion.
      *
-     * @Route("/{id}", name="userproject_update")
+     * @Route("/{id}", name="clientEdit")
      * @Method("PUT")
      * @Template("TareaBundle:Client:edit.html.twig")
      */
@@ -338,10 +338,10 @@ class ClientController extends Controller {
     /**
      * Deletes a Client entity. No elimina, modifica su estado a desactivado
      *
-     * @Route("/{id}", name="client_delete")
-     * @Method("DELETE")
+     * @Route("/{id}", name="aktivieren")
+     * @Method("UPDATE")
      */
-    public function borrarAction($id) {
+    public function desactivarAction($id) {
         $user = $this->container->get('security.context')->getToken()->getUser();
         $rolU = $user->getRol()->getRol();
         $request = $this->getRequest();

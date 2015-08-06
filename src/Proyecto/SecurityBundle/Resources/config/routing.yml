@@ -18,17 +18,17 @@ showUser:
     pattern: /showUser/{id}
     defaults: { _controller: ProyectoSecurityBundle:UserProject:show }
     
+#userEdit:
+#    pattern: /editUser/{id}
+#    defaults: { _controller: ProyectoSecurityBundle:UserProject:edit }
+    
 userEdit:
     pattern: /editUser/{id}
     defaults: { _controller: ProyectoSecurityBundle:UserProject:edit }
     
-userEditIly:
-    pattern: /editUserIly/{id}
-    defaults: { _controller: ProyectoSecurityBundle:UserProject:editIly }
-    
-userUpdate:
-    pattern: /editUser/{id}
-    defaults: { _controller: ProyectoSecurityBundle:UserProject:update }
+#userUpdate:
+#    pattern: /editUser/{id}
+#    defaults: { _controller: ProyectoSecurityBundle:UserProject:update }
     
 register:
     pattern: /register

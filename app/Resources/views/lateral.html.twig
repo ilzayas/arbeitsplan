@@ -9,7 +9,7 @@
 {% endblock %}
 {#<div class="col-md-2">#}
     <div class="row">
-        <div class="panel panel-info">
+        <div class="panel panel-primary">
             <div class="panel-heading">
                 <div class="panel-title"><strong>&nbsp;&nbsp;{{ "Fokus"|trans }}</strong>
                 </div>
@@ -29,16 +29,22 @@
                 &nbsp;<span class="glyphicon glyphicon-star">&nbsp;</span>
                 <a href="{{ path("meinTask") }}"> {{ 'Meine Aufgaben'|trans }}</a>
             </li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li class="list-group-item text-warning inline">
+                    &nbsp;<span class="glyphicon glyphicon-list-alt">&nbsp;</span>
+                    <a href="{{ path("taskAlle") }}"> {{ 'Alle Aufgaben'|trans }}</a>
+                </li>
+            {% endif %}
         </div>
     </div>
     {#-- listen ----------------------------------------#}
     <div class="row">
         <div class="panel-group" role="tablist" aria-multiselectable="true">
-            <div class="panel panel-info">
+            <div class="panel panel-primary">
                 <div class="panel-heading" role="tab" id="headingOne">
                     <h4 class="panel-title inline">
                         <strong>&nbsp;&nbsp;{{ 'Kunden'|trans }} </strong>
-                        <a id="client_add_link" href="{{ path('client_create') }}" data-toggle="tooltip" data-original-title="{{ 'Neue Kunde'|trans }}">
+                        <a id="client_add_link" href="{{ path('clientCreate') }}" data-toggle="tooltip" data-original-title="{{ 'Neue Kunde'|trans }}">
                             <span class="glyphicon glyphicon-plus-sign pull-right"></span>
                         </a>
                     </h4>
@@ -54,7 +60,7 @@
                             <li class="list-group-item text-primary inline" id="{{ client.id }}">
                                 &nbsp;<span class="glyphicon glyphicon-stop"></span>
                                 <a href="{{ path('tasksClient', { 'id': client.id }) }}">{{ client.name }}</a>
-                                <a href="{{ path('client_edit', { 'id': client.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Abändern Kunde'|trans }}">
+                                <a href="{{ path('clientEdit', { 'id': client.id }) }}" data-toggle="tooltip" data-original-title="{{ 'Abändern Kunde'|trans }}">
                                     <span class="glyphicon glyphicon-edit pull-right"></span>
                                 </a>
                             </li>                                

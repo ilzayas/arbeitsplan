@@ -100,31 +100,20 @@ class TaskType extends AbstractType {
                 ))
                 ->add('users', 'entity', array(
                     'required' => false,
-                    //'type' => new \Proyecto\SecurityBundle\Form\UserProjectType(),
                     "class" => 'ProyectoSecurityBundle:UserProject',
-                    //'data_class' => 'Proyecto\SecurityBundle\Entity\UserProject',
                     "attr" => array(
                         'empty_value' => 'Choose an option',
                     ),
-                    'empty_data' => null,
-                   // 'multiple' => true,
-                    //'allow_add' => true,
+                    'empty_data' => 'Choose an option',
                 ))
                 ->add('file', 'collection', array(
-                    //'type' => new DocumentType(),
                     'allow_add' => true,
                     'options' => array('data_class' => 'Proyecto\TaskBundle\Entity\Document',
                         'required' => false,),
                     'prototype' => true,
-                    
                     'type' => 'file',
-                    //'allow_add' => true,
                     'allow_delete' => true,
-                    //'prototype' => true,
                     'label' => 'File input',
-//                    'options' => array(
-//                        'required' => false,
-//            )
                     ))
         ;
     }

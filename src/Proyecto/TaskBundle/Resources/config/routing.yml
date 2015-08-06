@@ -1,24 +1,24 @@
-task_show:
+taskShow:
     pattern: /taskShow/{id}
     defaults: { _controller: TareaBundle:Task:show }
         
-task_new:
+taskNew:
     pattern: /neuTask
     defaults: { _controller: TareaBundle:Task:registrarTarea }
         
-taskIly:
-    pattern: /taskEditIly/{id}
+taskEdit:
+    pattern: /taskEdit/{id}
     defaults: { _controller: TareaBundle:Task:taskEdit }
     
-task_edit:
-    pattern: /taskEdit/{id}
-    defaults: { _controller: TareaBundle:Task:edit }
+#task_edit:
+#    pattern: /taskEdit/{id}
+#    defaults: { _controller: TareaBundle:Task:edit }
     
-task_update:
-    pattern: /taskEdit/{id}
-    defaults: { _controller: TareaBundle:Task:update }
+#task_update:
+#    pattern: /taskEdit/{id}
+#    defaults: { _controller: TareaBundle:Task:update }
     
-task_delete:
+taskDelete:
     pattern: /taskDelete/{id}
     defaults: { _controller: TareaBundle:Task:borrar }
     
@@ -26,7 +26,7 @@ eliminarTodas:
     pattern: /deleteAlles
     defaults: { _controller: TareaBundle:Task:deleteAlles }
     
-tasklist:
+taskList:
     pattern: /listTasks
     defaults: { _controller: TareaBundle:Task:index }
     
@@ -42,29 +42,25 @@ taskErledig:
     pattern: /erledig
     defaults: { _controller: TareaBundle:Task:listTasksErledigPage }
    
-client_create:
+clientCreate:
     pattern: /neuClient
     defaults: { _controller: TareaBundle:Client:registrarCliente }
     
-client_delete:
-    pattern: /clientDelete/{id}
-    defaults: { _controller: TareaBundle:Client:borrar }
+clientDeaktivieren:
+    pattern: /clientDeaktivieren/{id}
+    defaults: { _controller: TareaBundle:Client:desactivar }
     
-client_edit:
+clientAktivieren:
+    pattern: /clientAktivieren/{id}
+    defaults: { _controller: TareaBundle:Client:activar }
+    
+clientEdit:
     pattern: /clientEdit/{id}
     defaults: { _controller: TareaBundle:Client:clientEdit }
     
-#iliananiehus:
-#    pattern: /ilyNiehus/{id}
-#    defaults: { _controller: TareaBundle:Client:ilyEdit }
-    
-#client_update:
-#    pattern: /clientEdit/{id}
-#    defaults: { _controller: TareaBundle:Client:update }
-    
-client_show:
-    pattern: /showClient/{id}
-    defaults: { _controller: TareaBundle:Client:show }
+#client_show:
+#    pattern: /showClient/{id}
+#    defaults: { _controller: TareaBundle:Client:show }
     
 clientList:
     pattern: /listClient
@@ -83,7 +79,7 @@ meinTask:
     defaults: { _controller: TareaBundle:Task:misTareas }
     
 taskVorDreiMon:
-    pattern: /VorDreiMonFertig
+    pattern: /vorDreiMonFertig
     defaults: { _controller: TareaBundle:Task:tareasDreiMonFertig }
 
 export:
@@ -93,23 +89,3 @@ export:
 fertig:
     pattern: /fertig/{id}
     defaults: { _controller: TareaBundle:Task:fertig }
-#upload:
-#    pattern: /upload
-#    defaults: { _controller: TareaBundle:Default:upload }
-       
-ily:
-    pattern: /clientIly/{id}
-    defaults: { _controller: TareaBundle:Client:editIly }
-    
-clientActivate:
-    pattern: /clientActivate/{id}
-    defaults: { _controller: TareaBundle:Client:activar }
-    
-#este lo hice para probar subir archivo cuando se modifica una tarea
-subirArchivoExtra:
-    pattern: /subirArchivo/{id}
-    defaults: { _controller: TareaBundle:Task:subirExtra }
-       
-#taskFile:
-#    pattern: /file/{id}
-#    defaults: { _controller: TareaBundle:Task:getFile }

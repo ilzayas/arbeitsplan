@@ -1,26 +1,37 @@
-<div class="page-header alert alert-info banner-ily">    
-    <div>  
-        {% set locale= app.request.locale %}
-        {% if locale == 'de' %}
-            <span>DE</span>
-            <a href='{{ path('login', { '_locale': 'en' }) }}'>EN</a>
-        {% elseif locale == 'en' %}
-            <a href='{{ path('login', { '_locale': 'de' }) }}'>DE</a>
-            <span>EN</span>
-        {% endif %}
-        <div class="pull-right">{{ 'now' | date("F j, Y H:i", "Europe/Paris") }}&nbsp;
-            <a class="glyphicon glyphicon-question-sign" href="{{ asset('HP3.png') }}"></a></div>
-        <h1>{{ 'H & P Arbeitsplan'|trans }}
-            <small><ul class="list-inline top pull-right">
-                    {% block login %}
-                        {% if is_granted('ROLE_USER') %} 
-                            <li><i class="glyphicon glyphicon-user"></i></li>
-                            <li><p>{{ app.user }}</p></li>
-                            <li><a href="{{ path('logout') }}">{{ 'Logout'|trans }}</a></li>
-                        {% endif %}   
-                    {% endblock %}
-                </ul>
-            </small>
-        </h1>
+<div class="page-header alert alert-info banner-ily"
+     style="color: #fff;background-color: #337ab7;border-color: #337ab7;margin-bottom: 5px">    
+    {#<div>  #}
+    {#{% set locale= app.request.locale %}
+    {% if locale == 'de' %}
+        <span>DE</span>
+        <a href='{{ path('login', { '_locale': 'en' }) }}'>EN</a>
+    {% elseif locale == 'en' %}
+        <a href='{{ path('login', { '_locale': 'de' }) }}'>DE</a>
+        <span>EN</span>
+    {% endif %}#}
+    <div class="col-md-1" style="position: absolute;left: 0px; top: 10px;border-color: #337ab7;">
+        <img src="{{ asset('bundles/tarea/images/HP_LOGO.png') }}" 
+             style="height: 88px;position: absolute;left: 1px; top: 1px;bottom: 1px"/>
     </div>
+    <div class="col-md-9" style="left: 100px;">        
+        <h1>{{ 'Projectsplan'|trans }}</h1>
+    </div>
+    <div class="col-md-2 pull-right">
+        <div class="row pull-right">
+            {{ 'now' | date("F j, Y H:i", "Europe/Paris") }}&nbsp;
+            <a class="glyphicon glyphicon-question-sign" href="{{ asset('HP3.png') }}" style="color: #FFFFFF;"></a>
+        </div>
+        <div class="row pull-right">
+            <ul class="list-inline">
+                {% block login %}
+                    {% if is_granted('ROLE_USER') %} 
+                        <li><i class="glyphicon glyphicon-user"></i></li>
+                        <li><p>{{ app.user }}</p></li>
+                        <li><a href="{{ path('logout') }}" style="color: #FFFFFF;"><u>{{ 'Logout'|trans }}</u></a></li>
+                    {% endif %}   
+                {% endblock %}
+            </ul>
+        </div>
+    </div>       
+    {#</div>#}
 </div>

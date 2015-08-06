@@ -8,9 +8,9 @@
 {% block body %}
     <div class='container'>
         <div class='col-xs-12 col-sm-10 col-md-6 col-sm-offset-2 col-md-offset-2'>
-            <div class='panel panel-info'>
+            <div class='panel panel-primary'>
                 <div class="panel-heading">
-                    <div class="panel-title"><strong>{{ "Bearbeiten Client"|trans }}</strong></div>
+                    <div class="panel-title"><strong>{{ "Abändern Client"|trans }}</strong></div>
                     <div style="float:right; font-size: 80%; position: relative; top:-10px"></div>
                 </div>
                 {% if errors|length > 0 %}
@@ -23,13 +23,15 @@
                     {% endfor %}
                 {% endif %}
                 <div class='panel-body'>
-                    <form class='form-horizontal' action='{{ path("client_edit", { 'id': entity.id }) }}' method='post' {{ form_enctype(edit_form) }}>
+                    <form class='form-horizontal' action='{{ path("clientEdit", { 'id': entity.id }) }}' method='post' {{ form_enctype(edit_form) }}>
                         <div class='form-group'>
                             {{ form_widget(edit_form.name) }}
                         </div>
                         <hr>
-                        <input class='btn btn-primary text-center' type='submit' value={{ 'Speichern'|trans }}>
-                        <a class="btn btn-info" href="{{ path("tasklist") }}">{{ 'Abbrechen'|trans }}</a>
+                        <div class="col-md-offset-3">
+                            <input class='btn btn-primary text-center' type='submit' value={{ 'Speichern'|trans }}>
+                            <a class="btn btn-info" href="{{ path("taskList") }}">{{ 'Abbrechen'|trans }}</a>
+                        </div>
                         {{ form_rest(edit_form) }}
                     </form>
                 </div>

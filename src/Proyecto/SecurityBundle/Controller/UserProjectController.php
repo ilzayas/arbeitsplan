@@ -180,22 +180,22 @@ class UserProjectController extends Controller {
      * @Method("GET")
      * @Template()
      */
-    public function editAction($id) {
-        $em = $this->getDoctrine()->getManager();
-        $entity = $em->getRepository('ProyectoSecurityBundle:UserProject')->find($id);
-        if (!$entity) {
-            throw $this->createNotFoundException('Unable to find UserProject entity.');
-        }
-        $editForm = $this->createEditForm($entity);
-        $errors = $editForm->getErrors();
-        //$deleteForm = $this->createDeleteForm($id);
-        return array(
-            'entity' => $entity,
-            'edit_form' => $editForm->createView(),
-            'errors' => $errors,
-                // 'delete_form' => $deleteForm->createView(),
-        );
-    }
+//    public function editAction($id) {
+//        $em = $this->getDoctrine()->getManager();
+//        $entity = $em->getRepository('ProyectoSecurityBundle:UserProject')->find($id);
+//        if (!$entity) {
+//            throw $this->createNotFoundException('Unable to find UserProject entity.');
+//        }
+//        $editForm = $this->createEditForm($entity);
+//        $errors = $editForm->getErrors();
+//        //$deleteForm = $this->createDeleteForm($id);
+//        return array(
+//            'entity' => $entity,
+//            'edit_form' => $editForm->createView(),
+//            'errors' => $errors,
+//                // 'delete_form' => $deleteForm->createView(),
+//        );
+//    }
 
     /**
      * Creates a form to edit a UserProject entity.
@@ -253,7 +253,7 @@ class UserProjectController extends Controller {
      * @Method("PUT")
      * @Template("ProyectoSecurityBundle:UserProject:edit.html.twig")
      */
-    public function editIlyAction(Request $request, $id) {
+    public function editAction(Request $request, $id) {
         $em = $this->getDoctrine()->getManager();
         $entity = $em->getRepository('ProyectoSecurityBundle:UserProject')->find($id);
         if (!$entity) {
